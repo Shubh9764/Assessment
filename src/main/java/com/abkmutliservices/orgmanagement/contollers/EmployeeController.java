@@ -1,5 +1,6 @@
 package com.abkmutliservices.orgmanagement.contollers;
 
+import com.abkmutliservices.orgmanagement.dto.EmployeeCreateRequest;
 import com.abkmutliservices.orgmanagement.entities.Employee;
 import com.abkmutliservices.orgmanagement.service.EmployeeService;
 import jakarta.validation.Valid;
@@ -16,9 +17,9 @@ public class EmployeeController {
     @Autowired
     EmployeeService employeeService;
 
-    @PostMapping("/suborganization/{suborganizationId}/department/{departmentId}/role/{roleId}")
-    public ResponseEntity<Employee> createEmployee(@Valid @RequestBody Employee employee,@PathVariable Integer suborganizationId,@PathVariable Integer departmentId,@PathVariable Integer roleId){
-        Employee newEmployee = employeeService.createEmployee(employee,suborganizationId,departmentId,roleId);
+    @PostMapping
+    public ResponseEntity<Employee> createEmployee(@Valid @RequestBody EmployeeCreateRequest employeeCreateRequest){
+        Employee newEmployee = employeeService.createEmployee(employeeCreateRequest);
         return new ResponseEntity<>(newEmployee, HttpStatus.CREATED);
     }
 

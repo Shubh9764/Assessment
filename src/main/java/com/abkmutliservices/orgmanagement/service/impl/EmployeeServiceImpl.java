@@ -1,5 +1,6 @@
 package com.abkmutliservices.orgmanagement.service.impl;
 
+import com.abkmutliservices.orgmanagement.dto.EmployeeCreateRequest;
 import com.abkmutliservices.orgmanagement.entities.Department;
 import com.abkmutliservices.orgmanagement.entities.Employee;
 import com.abkmutliservices.orgmanagement.entities.Role;
@@ -31,7 +32,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     SubOrganizationRepo subOrganizationRepo;
     @Override
-    public Employee createEmployee(Employee employee,Integer suborganizationId,Integer departmentId,Integer roleId) {
+    public Employee createEmployee(EmployeeCreateRequest employeeCreateRequest) {
+        Employee employee = employeeCreateRequest.getEmployee();
        if(employeeRepo.findByEmail(employee.getEmail()).isPresent()){
            throw new MyUnqiueContraintException("Email already Exists");
        }
@@ -39,9 +41,9 @@ public class EmployeeServiceImpl implements EmployeeService {
            throw new MyUnqiueContraintException("Mobile Number already Exists");
        }
 
-        SubOrganization subOrganization = subOrganizationRepo.findById(suborganizationId).orElseThrow(() -> new RuntimeException("SubOrganization with id "+suborganizationId +"does not exists"));
-        Department department = departmentRepo.findById(departmentId).orElseThrow(() -> new RuntimeException("Department with id "+departmentId +" does not exists"));
-        Role role = roleRepo.findById(roleId).orElseThrow(() -> new ResourceNotFoundException("Role with id "+roleId +" does not exists"));
+        SubOrganization subOrganization = subOrganizationRepo.findById(employeeCreateRequest.getSuborganizationId()).orElseThrow(() -> new RuntimeException("SubOrganization with id "+employeeCreateRequest.getSuborganizationId() +"does not exists"));
+        Department department = departmentRepo.findById(employeeCreateRequest.getDepartmentId()).orElseThrow(() -> new RuntimeException("Department with id "+employeeCreateRequest.getDepartmentId() +" does not exists"));
+        Role role = roleRepo.findById(employeeCreateRequest.getRoleId()).orElseThrow(() -> new ResourceNotFoundException("Role with id "+employeeCreateRequest.getRoleId() +" does not exists"));
         employee.setSubOrganization(subOrganization);
         employee.setDepartment(department);
         employee.setRole(role);

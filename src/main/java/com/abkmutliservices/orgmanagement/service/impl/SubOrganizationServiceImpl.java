@@ -1,5 +1,6 @@
 package com.abkmutliservices.orgmanagement.service.impl;
 
+import com.abkmutliservices.orgmanagement.dto.SubOrganizationCreateRequest;
 import com.abkmutliservices.orgmanagement.entities.Organization;
 import com.abkmutliservices.orgmanagement.entities.SubOrganization;
 import com.abkmutliservices.orgmanagement.repo.OrganizationRepo;
@@ -19,8 +20,10 @@ public class SubOrganizationServiceImpl implements SubOrganizationService {
     OrganizationRepo organizationRepo;
 
     @Override
-    public SubOrganization createSubOrganization(SubOrganization subOrganization,Integer organizationId) {
-        Organization organization = organizationRepo.findById(organizationId).orElseThrow(() -> new RuntimeException("Organization with id "+organizationId +"does not exists"));
+    public SubOrganization createSubOrganization(SubOrganizationCreateRequest subOrganizationCreateRequest) {
+
+        Organization organization = organizationRepo.findById(subOrganizationCreateRequest.getOrganizationId()).orElseThrow(() -> new RuntimeException("Organization with id "+subOrganizationCreateRequest.getOrganizationId()+" does not exists"));
+        SubOrganization subOrganization = subOrganizationCreateRequest.getSubOrganization();
         subOrganization.setOrganization(organization);
         return subOrganizationRepo.save(subOrganization);
     }
